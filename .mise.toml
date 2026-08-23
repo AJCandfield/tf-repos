@@ -1,4 +1,13 @@
+redactions = ["*_TOKEN"]
+
 [tools]
 terraform = "1.15.8"
 terragrunt = "1.1.1"
 pre-commit = "4.6.2"
+
+[env]
+GITHUB_TOKEN = "{{ exec(command='gh auth token', cache_key='github-token', cache_duration='4h') | trim }}"
+
+[settings]
+# Automatically load envars from files in the project with this name
+env_file = ".env"

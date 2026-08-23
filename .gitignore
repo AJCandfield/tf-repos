@@ -11,7 +11,6 @@ crash.*.log
 # Credentials and local environment
 .env
 .env.*
-!.env.example
 *.pem
 *.key
 credentials.json
