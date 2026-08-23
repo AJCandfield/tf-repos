@@ -5,6 +5,10 @@ on:
     paths:
       - "clouds/**"
       - "docker/ci/**"
+      - ".mise.toml"
+      - ".pre-commit-config.yaml"
+      - "**/.terraform.lock.hcl"
+      - "renovate.json"
       - ".github/workflows/ci.yml"
       - ".github/workflows/toolchain-image.yml"
   workflow_dispatch:
@@ -20,7 +24,7 @@ jobs:
   terragrunt:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/ajcandfield/tf-repos/ci:latest
+      image: ghcr.io/ajcandfield/tf-repos/ci@sha256:f3b1f387214b24b30c2b164bbeef6f031257ad3712bf653bc9a18aa056e94d38
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}

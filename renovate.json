@@ -1,6 +1,151 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "dependencyDashboard": true,
+  "enabledManagers": [
+    "terraform",
+    "github-actions",
+    "dockerfile",
+    "mise",
+    "custom.regex"
+  ],
+  "minimumReleaseAge": "14 days",
+  "minimumReleaseAgeBehaviour": "timestamp-required",
+  "internalChecksFilter": "strict",
+  "schedule": [
+    "before 6am on monday"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": [
+      "before 6am on monday"
+    ]
+  },
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "automerge": true,
+    "labels": [
+      "security",
+      "dependencies"
+    ],
+    "schedule": [
+      "at any time"
+    ]
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)Dockerfile$/"
+      ],
+      "matchStrings": [
+        "ARG MISE_VERSION=(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "depNameTemplate": "jdx/mise",
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "semver",
+      "extractVersionTemplate": "^v?(?<version>.+)$"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Group Terraform provider updates",
+      "matchManagers": [
+        "terraform"
+      ],
+      "matchDepTypes": [
+        "provider",
+        "required_provider"
+      ],
+      "groupName": "Terraform providers",
+      "groupSlug": "terraform-providers"
+    },
+    {
+      "description": "Group Terraform module updates",
+      "matchManagers": [
+        "terraform"
+      ],
+      "matchDepTypes": [
+        "module"
+      ],
+      "groupName": "Terraform modules",
+      "groupSlug": "terraform-modules"
+    },
+    {
+      "description": "Automerge Terraform provider patch updates",
+      "matchManagers": [
+        "terraform"
+      ],
+      "matchDepTypes": [
+        "provider",
+        "required_provider"
+      ],
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "automerge": true
+    },
+    {
+      "description": "Automerge Terraform lock-file maintenance",
+      "matchManagers": [
+        "terraform"
+      ],
+      "matchUpdateTypes": [
+        "lockFileMaintenance"
+      ],
+      "groupName": "Terraform lock files",
+      "groupSlug": "terraform-lock-files",
+      "automerge": true
+    },
+    {
+      "description": "Group and automerge toolchain patch and minor updates",
+      "matchManagers": [
+        "mise",
+        "custom.regex"
+      ],
+      "matchUpdateTypes": [
+        "patch",
+        "minor"
+      ],
+      "groupName": "Toolchain updates",
+      "groupSlug": "toolchain-updates",
+      "automerge": true
+    },
+    {
+      "description": "Group and automerge Docker digest and patch updates",
+      "matchManagers": [
+        "dockerfile"
+      ],
+      "matchUpdateTypes": [
+        "digest",
+        "patch"
+      ],
+      "groupName": "Docker image updates",
+      "groupSlug": "docker-image-updates",
+      "automerge": true
+    },
+    {
+      "description": "Group and automerge GitHub Actions patch and digest updates",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "patch",
+        "digest"
+      ],
+      "groupName": "GitHub Actions updates",
+      "groupSlug": "github-actions-updates",
+      "automerge": true
+    },
+    {
+      "description": "Keep major updates manual",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "automerge": false
+    }
   ]
 }
