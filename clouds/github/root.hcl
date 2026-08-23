@@ -1,6 +1,6 @@
 locals {
   cloud_provider = "github"
-  github_owner   = get_env("GITHUB_OWNER", "AJCandfield")
+  github_owner   = "AJCandfield"
 
   # Local state is intentionally kept beside each backend-specific leaf.
   state_path = "${get_repo_root()}/clouds/github/${path_relative_to_include()}/terraform.tfstate"
