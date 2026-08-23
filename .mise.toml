@@ -2,7 +2,7 @@ redactions = ["*_TOKEN"]
 
 [tools]
 terraform = "1.15.8"
-terragrunt = "1.1.1"
+terragrunt = "1.1.2"
 pre-commit = "4.6.2"
 
 [env]
