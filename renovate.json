@@ -56,13 +56,14 @@
         "/(^|/)terragrunt\\.hcl$/"
       ],
       "matchStrings": [
-        "source = \"git::https://github\\.com/AJCandfield/tf-modules\\.git//modules/github/repository\\?ref=(?<currentDigest>[a-f0-9]{40})\"\\s+# (?<currentValue>github/repository-v\\d+\\.\\d+\\.\\d+)"
+        "source = \"git::https://github\\.com/AJCandfield/tf-modules\\.git//modules/(?<module>[A-Za-z0-9][A-Za-z0-9_/-]*)\\?ref=(?<currentDigest>[a-f0-9]{40})\"\\s+# (?<currentValue>[^\\s]+)"
       ],
-      "depNameTemplate": "AJCandfield/tf-modules",
+      "depNameTemplate": "AJCandfield/tf-modules/{{{module}}}",
+      "packageNameTemplate": "AJCandfield/tf-modules",
       "datasourceTemplate": "github-tags",
       "versioningTemplate": "semver",
-      "extractVersionTemplate": "^github/repository-v(?<version>.+)$",
-      "autoReplaceStringTemplate": "source = \"git::https://github.com/AJCandfield/tf-modules.git//modules/github/repository?ref={{{newDigest}}}\" # github/repository-v{{{newValue}}}"
+      "extractVersionTemplate": "^{{{module}}}-v(?<version>.+)$",
+      "autoReplaceStringTemplate": "source = \"git::https://github.com/AJCandfield/tf-modules.git//modules/{{{module}}}?ref={{{newDigest}}}\" # {{{module}}}-v{{{newValue}}}"
     }
   ],
   "packageRules": [
@@ -137,7 +138,7 @@
       "matchManagers": [
         "custom.regex"
       ],
-      "matchDepNames": [
+      "matchPackageNames": [
         "AJCandfield/tf-modules"
       ],
       "groupName": "tf-modules releases",
