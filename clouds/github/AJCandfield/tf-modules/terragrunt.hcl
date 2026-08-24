@@ -3,7 +3,9 @@ include "root" {
 }
 
 locals {
-  release_please_secrets = yamldecode(sops_decrypt_file("${get_terragrunt_dir()}/release-please-token.yaml"))
+  release_please_secrets = get_env("CI", "") == "true" ? {
+    RELEASE_PLEASE_TOKEN = "validation-only"
+  } : yamldecode(sops_decrypt_file("${get_terragrunt_dir()}/release-please-token.yaml"))
 }
 
 terraform {
