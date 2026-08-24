@@ -2,7 +2,8 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    "helpers:pinGitHubActionDigests"
+    "helpers:pinGitHubActionDigests",
+    ":semanticCommitTypeAll(chore)"
   ],
   "dependencyDashboard": true,
   "enabledManagers": [
@@ -48,6 +49,20 @@
       "datasourceTemplate": "github-releases",
       "versioningTemplate": "semver",
       "extractVersionTemplate": "^v?(?<version>.+)$"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)terragrunt\\.hcl$/"
+      ],
+      "matchStrings": [
+        "source = \"git::https://github\\.com/AJCandfield/tf-modules\\.git//modules/github/repository\\?ref=(?<currentDigest>[a-f0-9]{40})\"\\s+# (?<currentValue>github/repository-v\\d+\\.\\d+\\.\\d+)"
+      ],
+      "depNameTemplate": "AJCandfield/tf-modules",
+      "datasourceTemplate": "github-tags",
+      "versioningTemplate": "semver",
+      "extractVersionTemplate": "^github/repository-v(?<version>.+)$",
+      "autoReplaceStringTemplate": "source = \"git::https://github.com/AJCandfield/tf-modules.git//modules/github/repository?ref={{{newDigest}}}\" # github/repository-v{{{newValue}}}"
     }
   ],
   "packageRules": [
@@ -101,18 +116,33 @@
       "automerge": true
     },
     {
-      "description": "Group and automerge toolchain patch and minor updates",
+      "description": "Group and automerge Mise patch and minor updates",
       "matchManagers": [
         "mise",
         "custom.regex"
+      ],
+      "matchDepNames": [
+        "jdx/mise"
       ],
       "matchUpdateTypes": [
         "patch",
         "minor"
       ],
-      "groupName": "Toolchain updates",
-      "groupSlug": "toolchain-updates",
+      "groupName": "Mise updates",
+      "groupSlug": "mise-updates",
       "automerge": true
+    },
+    {
+      "description": "Group tf-modules release updates for review",
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchDepNames": [
+        "AJCandfield/tf-modules"
+      ],
+      "groupName": "tf-modules releases",
+      "groupSlug": "tf-modules-releases",
+      "automerge": false
     },
     {
       "description": "Group and automerge Docker digest and patch updates",
