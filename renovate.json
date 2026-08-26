@@ -134,16 +134,36 @@
       "automerge": true
     },
     {
-      "description": "Group tf-modules release updates for review",
+      "description": "Create tf-modules release PRs immediately",
       "matchManagers": [
         "custom.regex"
       ],
       "matchPackageNames": [
         "AJCandfield/tf-modules"
       ],
+      "minimumReleaseAge": "0 days",
+      "schedule": [
+        "at any time"
+      ],
       "groupName": "tf-modules releases",
       "groupSlug": "tf-modules-releases",
       "automerge": false
+    },
+    {
+      "description": "Automerge non-major tf-modules releases",
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "AJCandfield/tf-modules"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "tf-modules non-major releases",
+      "groupSlug": "tf-modules-non-major-releases",
+      "automerge": true
     },
     {
       "description": "Group and automerge Docker digest and patch updates",
